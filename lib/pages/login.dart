@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,6 +15,12 @@ class _LoginPageState extends State<LoginPage> {
   _LoginPageState() {
     _usernameFilter.addListener(_usernameListen);
     _passwordFilter.addListener(_passwordListen);
+  }
+
+  Future<void> _saveValue() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('Nontri username', _username);
+    prefs.setString('Nontri password', _password);
   }
 
   void _usernameListen() {
@@ -61,16 +68,23 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           new Container(
             child: new TextField(
-                controller: _usernameFilter,
-                decoration: new InputDecoration(labelText: 'Nontri Account'),
-                onEditingComplete: () => node.nextFocus()),
+              controller: _usernameFilter,
+              decoration: new InputDecoration(labelText: 'Nontri Account'),
+              onEditingComplete: () => node.nextFocus(),
+              textInputAction: TextInputAction.next,
+            ),
           ),
           new Container(
             child: new TextField(
-                controller: _passwordFilter,
-                decoration: new InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                onSubmitted: (_) => node.unfocus()),
+              controller: _passwordFilter,
+              decoration: new InputDecoration(labelText: 'Password'),
+              obscureText: true,
+              onSubmitted: (_) {
+                node.unfocus();
+                _loginPressed();
+              },
+              textInputAction: TextInputAction.done,
+            ),
           )
         ],
       ),
@@ -95,7 +109,8 @@ class _LoginPageState extends State<LoginPage> {
 
   // These functions can self contain any user auth logic required, they all have access to _username and _password
 
-  void _loginPressed() {
+  Future<void> _loginPressed() async {
+    await _saveValue();
     Navigator.pushNamed(context, '/info');
   }
 }
