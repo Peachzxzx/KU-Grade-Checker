@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -76,12 +77,14 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildUsernameTextField(node) {
     return new Container(
       child: new TextField(
-        controller: _usernameFilter,
-        decoration: new InputDecoration(
-            labelText: 'Nontri Account', icon: Icon(Icons.person)),
-        onEditingComplete: () => node.nextFocus(),
-        textInputAction: TextInputAction.next,
-      ),
+          controller: _usernameFilter,
+          decoration: new InputDecoration(
+              labelText: 'Nontri Account', icon: Icon(Icons.person)),
+          onEditingComplete: () => node.nextFocus(),
+          textInputAction: TextInputAction.next,
+          inputFormatters: [
+            new FilteringTextInputFormatter.allow(RegExp("[bg0-9]")),
+          ]),
     );
   }
 
@@ -116,13 +119,13 @@ class _LoginPageState extends State<LoginPage> {
       child: new Column(
         children: <Widget>[
           new RaisedButton(
-              child: new Text(
-                'Login',
-                style: TextStyle(color: Color(0xFFFFFFFF)),
-              ),
-              onPressed: _loginPressed,
-              color: Color(0xFFB2BB1E),
-              ),
+            child: new Text(
+              'Login',
+              style: TextStyle(color: Color(0xFFFFFFFF)),
+            ),
+            onPressed: _loginPressed,
+            color: Color(0xFFB2BB1E),
+          ),
         ],
       ),
     );
