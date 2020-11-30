@@ -11,7 +11,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordFilter = new TextEditingController();
   String _username = "";
   String _password = "";
-
+  bool _showPassword = false;
   _LoginPageState() {
     _usernameFilter.addListener(_usernameListen);
     _passwordFilter.addListener(_passwordListen);
@@ -66,29 +66,49 @@ class _LoginPageState extends State<LoginPage> {
     return new Container(
       child: new Column(
         children: <Widget>[
-          new Container(
-            child: new TextField(
-              controller: _usernameFilter,
-              decoration: new InputDecoration(labelText: 'Nontri Account'),
-              onEditingComplete: () => node.nextFocus(),
-              textInputAction: TextInputAction.next,
-            ),
-          ),
-          new Container(
-            child: new TextField(
-              controller: _passwordFilter,
-              decoration: new InputDecoration(labelText: 'Password'),
-              obscureText: true,
-              onSubmitted: (_) {
-                node.unfocus();
-                _loginPressed();
-              },
-              textInputAction: TextInputAction.done,
-            ),
-          )
+          _buildUsernameTextField(node),
+          _buildPasswordTextField(node),
         ],
       ),
     );
+  }
+
+  Widget _buildUsernameTextField(node) {
+    return new Container(
+      child: new TextField(
+        controller: _usernameFilter,
+        decoration: new InputDecoration(
+            labelText: 'Nontri Account', icon: Icon(Icons.person)),
+        onEditingComplete: () => node.nextFocus(),
+        textInputAction: TextInputAction.next,
+      ),
+    );
+  }
+
+  Widget _buildPasswordTextField(node) {
+    return new Container(
+        child: new TextField(
+      controller: _passwordFilter,
+      decoration: new InputDecoration(
+          labelText: 'Password',
+          icon: Icon(Icons.security),
+          suffixIcon: IconButton(
+              icon: Icon(
+                Icons.remove_red_eye,
+                color: this._showPassword ? Colors.blue : Colors.grey,
+              ),
+              onPressed: () {
+                setState(() => this._showPassword = !this._showPassword);
+              })),
+      obscureText: !this._showPassword,
+      enableSuggestions: false,
+      autocorrect: false,
+      onSubmitted: (_) {
+        node.unfocus();
+        _loginPressed();
+      },
+      textInputAction: TextInputAction.done,
+    ));
   }
 
   Widget _buildButtons() {
@@ -101,7 +121,8 @@ class _LoginPageState extends State<LoginPage> {
                 style: TextStyle(color: Color(0xFFFFFFFF)),
               ),
               onPressed: _loginPressed,
-              color: Color(0xFFB2BB1E)),
+              color: Color(0xFFB2BB1E),
+              ),
         ],
       ),
     );
