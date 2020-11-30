@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class InfoPage extends StatefulWidget {
   @override
@@ -9,15 +9,14 @@ class InfoPage extends StatefulWidget {
 class _InfoPageState extends State<InfoPage> {
   var _id;
   var _password;
+  final _storage = new FlutterSecureStorage();
   _InfoPageState() {
     _getData();
   }
 
   Future<void> _getData() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    var ids = prefs.getString('Nontri username');
-    var passwords = prefs.getString('Nontri password');
+    String ids = await _storage.read(key: 'Nontri username');
+    String passwords = await _storage.read(key: 'Nontri password');
     setState(() {
       _id = ids;
       _password = passwords;
@@ -59,8 +58,7 @@ class _InfoPageState extends State<InfoPage> {
   }
 
   Future<void> _logoutPressed() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    await _storage.deleteAll();
     Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 }

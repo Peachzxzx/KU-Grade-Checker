@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -12,15 +12,15 @@ class _LoginPageState extends State<LoginPage> {
   String _username = "";
   String _password = "";
   bool _showPassword = false;
+  final _storage = new FlutterSecureStorage();
   _LoginPageState() {
     _usernameFilter.addListener(_usernameListen);
     _passwordFilter.addListener(_passwordListen);
   }
 
   Future<void> _saveValue() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('Nontri username', _username);
-    prefs.setString('Nontri password', _password);
+    await _storage.write(key: 'Nontri username', value: _username);
+    await _storage.write(key: 'Nontri password', value: _password);
   }
 
   void _usernameListen() {
