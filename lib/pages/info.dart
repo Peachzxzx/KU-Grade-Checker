@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ku_auto_grade_check/functions/createMaterialColor.dart';
 
 class InfoPage extends StatefulWidget {
   @override
@@ -35,6 +38,35 @@ class _InfoPageState extends State<InfoPage> {
             new Container(child: Text("Username: $_id")),
             new Container(child: Text("Password: $_password")),
             _buildLogoutButtons()
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('KU Auto Grade Check',
+                  style: TextStyle(color: Colors.white)),
+              decoration: BoxDecoration(
+                color: createMaterialColor(Color(0xFF006664)),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.wifi),
+              title: Text('Request Page'),
+              onTap: () {
+                Navigator.pushNamed(context, '/request');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.close),
+              title: Text('Close'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
           ],
         ),
       ),
