@@ -61,6 +61,6 @@ class _InfoPageState extends State<InfoPage> {
   Future<void> _logoutPressed() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.clear();
-    Navigator.pushNamed(context, '/');
+    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 }
