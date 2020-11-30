@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ku_auto_grade_check/pages/info.dart';
 import 'package:ku_auto_grade_check/pages/login.dart';
 
 void main() {
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
+        '/info': (context) => InfoPage(),
       },
     );
   }
