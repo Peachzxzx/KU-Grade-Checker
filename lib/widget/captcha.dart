@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ku_auto_grade_check/client.dart';
+import 'dart:core';
 
 class CaptchaImage extends StatefulWidget {
   @override
@@ -7,13 +9,21 @@ class CaptchaImage extends StatefulWidget {
 
 class _CaptchaImageState extends State<CaptchaImage> {
   static const url = "https://grade-std.ku.ac.th/image_capt.php";
-  static int count = 0;
+  // static const url = "https://pirun.ku.ac.th/~b6110500241/01388263/favicon.ico";
+  var _captchaImage;
+  var client = new Session();
+  _CaptchaImageState() {
+    client
+        .get(url)
+        .then((response) => _captchaImage =
+            Image.memory(response.bodyBytes, gaplessPlayback: true).image);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       Spacer(),
-      Image.network("$url?v=$count", gaplessPlayback: true),
+      Image(image: this._captchaImage),
       Expanded(
           child: Container(
         alignment: Alignment.centerLeft,
@@ -26,9 +36,14 @@ class _CaptchaImageState extends State<CaptchaImage> {
     ]);
   }
 
-  void onPress() {
+  Future<void> getCaptchaImage() async {
+    var response = await client.get(url);
     setState(() {
-      count++;
+      _captchaImage = Image.memory(response.bodyBytes, gaplessPlayback: true).image;
     });
+  }
+
+  void onPress() {
+    getCaptchaImage();
   }
 }
