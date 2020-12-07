@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ku_auto_grade_check/functions/createMaterialColor.dart';
+import 'package:ku_auto_grade_check/pages/grade.dart';
 import 'package:ku_auto_grade_check/pages/info.dart';
 import 'package:ku_auto_grade_check/pages/login.dart';
 import 'package:ku_auto_grade_check/pages/request.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => LoginPage(),
         '/info': (context) => InfoPage(),
         '/request': (context) => RequestPage(),
+        '/grade': (context) => GradePage(),
       },
     );
   }

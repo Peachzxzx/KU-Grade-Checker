@@ -59,6 +59,12 @@ class _InfoPageState extends State<InfoPage> {
               onTap: () {
                 Navigator.pushNamed(context, '/request');
               },
+            ),ListTile(
+              leading: Icon(Icons.my_library_books),
+              title: Text('Grade Page'),
+              onTap: () {
+                Navigator.pushNamed(context, '/grade');
+              },
             ),
             ListTile(
               leading: Icon(Icons.close),
