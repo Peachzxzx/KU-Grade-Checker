@@ -1,7 +1,7 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ku_auto_grade_check/class/grade-std.dart';
 import 'package:ku_auto_grade_check/functions/createMaterialColor.dart';
 
 class InfoPage extends StatefulWidget {
@@ -90,6 +90,7 @@ class _InfoPageState extends State<InfoPage> {
   }
 
   Future<void> _logoutPressed() async {
+    await GradeStd.chkLogout();
     await _storage.deleteAll();
     Navigator.popUntil(context, ModalRoute.withName('/'));
   }

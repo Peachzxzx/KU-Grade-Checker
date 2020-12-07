@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:ku_auto_grade_check/class/grade-std.dart';
 import 'package:ku_auto_grade_check/widget/captcha.dart';
-import 'package:ku_auto_grade_check/client.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   String _captcha = "";
   bool _showPassword = false;
   final _storage = new FlutterSecureStorage();
+  final GradeStd grade_std = new GradeStd();
   _LoginPageState() {
     _usernameFilter.addListener(_usernameListen);
     _passwordFilter.addListener(_passwordListen);
@@ -26,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode passwordFocusNode;
   FocusNode captchaFocusNode;
 
-  var client = Session();
   @override
   void initState() {
     super.initState();
@@ -177,37 +177,17 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // These functions can self contain any user auth logic required, they all have access to _username and _password
-  Future<void> login() async {
-    var url = 'https://grade-std.ku.ac.th/GSTU_login_.php';
-    try {
-      Session.headers['User-Agent'] =
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:83.0) Gecko/20100101 Firefox/83.0";
-      Session.headers['Host'] = 'grade-std.ku.ac.th';
-      Session.headers['Origin'] = 'https://grade-std.ku.ac.th';
-      Session.headers['Referer'] = 'https://grade-std.ku.ac.th/GSTU_login_.php';
-      var response = await client.post(url, {
-        'UserName': _usernameFilter.text,
-        'Password': _passwordFilter.text,
-        'zone': '0',
-        'captcha': _captchaFilter.text
-      });
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      Session.headers.remove('Host');
-      Session.headers.remove('Origin');
-      Session.headers.remove('Referer');
-      response = await client.get(
-        "https://grade-std.ku.ac.th/GSTU_course_.php",
-      );
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-    } finally {}
+  Future<bool> login() async {
+    grade_std.setUsername(_username);
+    grade_std.setPassword(_password);
+    return await grade_std.login(_captcha);
   }
 
   Future<void> _loginPressed() async {
-    await login();
-    await _saveValue();
-    Navigator.pushNamed(context, '/info');
+    if (await login()) {
+      await _saveValue();
+      Navigator.pushNamed(context, '/info');
+    }
   }
 
   Widget _buildCaptchaField(node) {
