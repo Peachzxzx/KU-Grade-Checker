@@ -43,7 +43,7 @@ class _CaptchaImageState extends State<CaptchaImage> {
     });
   }
 
-  void onPress() {
-    getCaptchaImage();
+  Future<void> onPress() async {
+    await getCaptchaImage();
   }
 }
